@@ -526,6 +526,11 @@ module YARD
           self.generate = false
         end
 
+        opts.on('-j', '--json-only', 'Only generate JSON dump, no documentation.') do
+          self.generate = false
+          YARD::Registry.json_dump= true
+        end
+
         opts.on('-c', '--use-cache [FILE]',
                 "Use the cached .yardoc db to generate documentation.",
                 "  (defaults to no cache)") do |file|

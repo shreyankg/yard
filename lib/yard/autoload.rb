@@ -189,6 +189,7 @@ module YARD
     autoload :ProcessSerializer,    __p('serializers/process_serializer')
     autoload :StdoutSerializer,     __p('serializers/stdout_serializer')
     autoload :YardocSerializer,     __p('serializers/yardoc_serializer')
+    autoload :JSONSerializer,       __p('serializers/json_serializer')
   end
 
   # Namespace for classes and modules that handle serving documentation over HTTP

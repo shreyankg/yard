@@ -5,6 +5,7 @@ module YARD
   #
   # @see Registry
   # @see Serializers::YardocSerializer
+  # @see Serializers::JSONSerializer
   class RegistryStore
     # @deprecated The registry no longer tracks proxy types
     attr_reader :proxy_types
@@ -168,11 +169,16 @@ module YARD
     # @param [Boolean] merge if true, merges the data in memory with the
     #   data on disk, otherwise the data on disk is deleted.
     # @param [String, nil] file if supplied, the name of the file to save to
+    # @param [Boolean] json_dump whether to dump into JSON
     # @return [Boolean] whether the database was saved
-    def save(merge = true, file = nil)
+    def save(merge = true, file = nil, json_dump = false)
       if file && file != @file
         @file = file
-        @serializer = Serializers::YardocSerializer.new(@file)
+        if json_dump
+          @serializer = Serializers::JSONSerializer.new(@file)
+        else
+          @serializer = Serializers::YardocSerializer.new(@file)
+        end
       end
       destroy unless merge
 
@@ -184,8 +190,13 @@ module YARD
           @serializer.serialize(object)
         end
       end
-      write_proxy_types
-      write_object_types
+      if json_dump
+        write_proxy_types_json
+        write_object_types_json
+      else
+        write_proxy_types
+        write_object_types
+      end
       write_checksums
       true
     end
@@ -308,6 +319,14 @@ module YARD
 
     def write_object_types
       File.open!(object_types_path, 'wb') {|f| f.write(Marshal.dump(@object_types)) }
+    end
+
+    def write_proxy_types_json
+      File.open!(proxy_types_path, 'wb') {|f| f.write(JSON.dump(@proxy_types)) }
+    end
+
+    def write_object_types_json
+      File.open!(object_types_path, 'wb') {|f| f.write(JSON.dump(@object_types)) }
     end
 
     def write_checksums

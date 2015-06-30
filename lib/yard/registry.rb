@@ -72,6 +72,10 @@ module YARD
       # @return [String] the yardoc filename
       # @see DEFAULT_YARDOC_FILE
       attr_accessor :yardoc_file
+
+      # @return [Boolean] whether to objects should be dumped into JSON
+      attr_accessor :json_dump
+
       undef yardoc_file, yardoc_file=
       def yardoc_file=(v) Thread.current[:__yard_yardoc_file__] = v end
       def yardoc_file
@@ -157,7 +161,7 @@ module YARD
       # @param [String] file the yardoc file to save to
       # @return [Boolean] true if the file was saved
       def save(merge = false, file = yardoc_file)
-        thread_local_store.save(merge, file)
+        thread_local_store.save(merge, file, @json_dump)
       end
 
       # Deletes the yardoc file from disk
