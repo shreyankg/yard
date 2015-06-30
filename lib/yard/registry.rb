@@ -30,6 +30,7 @@ module YARD
   #   Registry.resolve(P('YARD::CodeObjects::Base'), '#docstring', true)
   module Registry
     DEFAULT_YARDOC_FILE = ".yardoc"
+    DEFAULT_JSONDOC_FILE = ".jsondoc"
     LOCAL_YARDOC_INDEX = File.expand_path('~/.yard/gem_index')
     DEFAULT_PO_DIR = "po"
 
@@ -70,16 +71,24 @@ module YARD
 
       # Gets/sets the yardoc filename
       # @return [String] the yardoc filename
-      # @see DEFAULT_YARDOC_FILE
+      # @see DEFAULT_YARDOC_FILE, DEFAULT_JSONDOC_FILE,
       attr_accessor :yardoc_file
 
-      # @return [Boolean] whether to objects should be dumped into JSON
+      # @return [Boolean] whether objects should be dumped into .jsondoc
       attr_accessor :json_dump
+
+      def default_serializer_file
+        if @json_dump
+          DEFAULT_JSONDOC_FILE
+        else
+          DEFAULT_YARDOC_FILE
+        end
+      end
 
       undef yardoc_file, yardoc_file=
       def yardoc_file=(v) Thread.current[:__yard_yardoc_file__] = v end
       def yardoc_file
-        Thread.current[:__yard_yardoc_file__] ||= DEFAULT_YARDOC_FILE
+        Thread.current[:__yard_yardoc_file__] ||= default_serializer_file
       end
 
       # @group Loading Data from Disk

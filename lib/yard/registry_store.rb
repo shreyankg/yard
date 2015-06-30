@@ -204,12 +204,12 @@ module YARD
     # Deletes the .yardoc database on disk
     #
     # @param [Boolean] force if force is not set to true, the file/directory
-    #   will only be removed if it ends with .yardoc. This helps with
-    #   cases where the directory might have been named incorrectly.
-    # @return [Boolean] true if the .yardoc database was deleted, false
+    #   will only be removed if it ends with .yardoc or .jsondoc. This helps
+    #   with cases where the directory might have been named incorrectly.
+    # @return [Boolean] true if the database was deleted, false
     #   otherwise.
     def destroy(force = false)
-      if (!force && file =~ /\.yardoc$/) || force
+      if (!force && file =~ /\.(yar|json)doc$/) || force
         if File.file?(@file)
           # Handle silent upgrade of old .yardoc format
           File.unlink(@file)

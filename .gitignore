@@ -3,6 +3,7 @@ _Yardoc
 *.rbc
 *.pdf
 .yardoc
+.jsondoc
 *.gem
 Gemfile.lock
 /pkg

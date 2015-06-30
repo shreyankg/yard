@@ -242,12 +242,16 @@ module YARD
         end
 
         checksums = nil
-        if use_cache
+        if use_cache && !YARD::Registry.json_dump
           Registry.load
           checksums = Registry.checksums.dup
         end
         YARD.parse(files, excluded)
-        Registry.save(use_cache) if save_yardoc
+        if YARD::Registry.json_dump
+          Registry.save(false)
+        else
+          Registry.save(use_cache) if save_yardoc
+        end
 
         if generate
           run_generate(checksums)
@@ -512,8 +516,9 @@ module YARD
         opts.separator ""
         opts.separator "General Options:"
 
-        opts.on('-b', '--db FILE', 'Use a specified .yardoc db to load from or save to',
-                      '  (defaults to .yardoc)') do |yfile|
+        opts.on('-b', '--db FILE', 'Use a specified .yardoc or .jsondoc db to save to',
+                      '   or a .yardoc file to load from ',
+                      '   (defaults to .yardoc or .jsondoc)') do |yfile|
           YARD::Registry.yardoc_file = yfile
         end
 
@@ -526,9 +531,9 @@ module YARD
           self.generate = false
         end
 
-        opts.on('-j', '--json-only', 'Only generate JSON dump, no documentation.') do
+        opts.on('-j', '--json-only', 'Only generate .jsondoc database, no documentation.') do
           self.generate = false
-          YARD::Registry.json_dump= true
+          YARD::Registry.json_dump = true
         end
 
         opts.on('-c', '--use-cache [FILE]',

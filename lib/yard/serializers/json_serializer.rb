@@ -30,7 +30,7 @@ module YARD
             end
           end.join('/') + '.' + extension
         when YARD::CodeObjects::RootObject
-          'root.dat'
+          'root.json'
         else
           super(object)
         end
