@@ -183,7 +183,7 @@ module YARD
       destroy unless merge
 
       sdb = Registry.single_object_db
-      if sdb == true || sdb == nil
+      if sdb == true || sdb == nil || json_dump
         @serializer.serialize(@store)
       else
         values(false).each do |object|

@@ -523,7 +523,7 @@ module YARD
         end
 
         opts.on('--[no-]single-db', 'Whether code objects should be stored to single',
-                                    '  database file (advanced)') do |use_single_db|
+                                    '  database file (advanced, only for .yardoc)') do |use_single_db|
           Registry.single_object_db = use_single_db
         end
 
