@@ -25,7 +25,11 @@ module YARD
       def hasher(object)
         keys = %w'name signature namespace base_docstring files
             type source source_type dynamic group visibility'
-        keys.zip(keys.map { |e| object[e] }).to_h
+        hash = Hash.new
+        keys.each do |key|
+          hash[key] = object[key]
+        end
+        hash
       end
 
       # structures object into data strutures
